@@ -33,7 +33,7 @@ public:
     return c;
     }
     float dot(Vector3 b) // return this dotted with b
-{return x * b.x + y * b.y + z * b.z;}
+    {return x * b.x + y * b.y + z * b.z;}
 };
 
 #endif
