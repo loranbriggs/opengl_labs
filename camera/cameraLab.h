@@ -15,30 +15,45 @@
 #include <GL/gl.h>
 #endif
 
+#include <math.h>
 #include "Camera.h"
 #include "Mouse.h"
 #include "Vector3.h"
+
+#define PI 3.1415
 
 //Global Variables
 const int screenWidth = 500;	   // width of screen window in pixels
 const int screenHeight = 500;	   // height of screen window in pixels
 
-// global values for shading
-GLfloat ambient[] = {0.7f, 0.7f, 0.7f, 1.0f};
-GLfloat diffuse[] = {0.6f, 0.6f, 0.6f, 1.0f};
-GLfloat specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-GLfloat shininess[] = {50.0f};
+// lighting
+GLfloat position[] = {2.0f, 6.0f, 3.0f, 1.0f};
+GLfloat lightIntensity0[] = {0.7f, 0.7f, 0.7f, 1.0f};
+GLfloat lightIntensity1[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-GLfloat position[] = {2.0f, 6.0f, 3.0f, 0.0f};
-GLfloat lightIntensity[] = {0.7f, 0.7f, 0.7f, 1.0f};
-
-const int gridDim =  50;
+const int gridDim =  5;
 
 Camera cam; // global camera object
 Mouse mouse;
 
-GLfloat teaX = 0;
-GLfloat teaY = 0;
-GLfloat teaZ = 0;
+GLfloat tea1X = 2;
+GLfloat tea1Y = 0;
+GLfloat tea1Z = -2;
+
+GLfloat tea2X = -2;
+GLfloat tea2Y = 0;
+GLfloat tea2Z = 2;
+
 GLfloat teaAngle = 0;
+
+// animation variables
+bool animate = false;
+int cnt = 0;
+float t;
+int intervals = 100;
+int scale = 3;
+
+// methods
+void mySleep(int sleepMs);
+
 #endif

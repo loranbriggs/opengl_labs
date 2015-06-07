@@ -8,19 +8,14 @@
 void myInit()
 {
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
     glShadeModel(GL_SMOOTH);
     glEnable(GL_NORMALIZE);
     glEnable(GL_DEPTH_TEST);
 
-    glLightfv(GL_LIGHT0, GL_POSITION, position);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
-
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
-
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHT0);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity0);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, lightIntensity1);
+    
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  // background is black
     glColor3f(1.0f, 1.0f, 1.0f);    // drawing color is white
@@ -30,7 +25,7 @@ void myInit()
     //---------------------------
 
     //make the initial camera
-    cam.set(Point3(4, 4, 4), Point3(0, 0, 0), Vector3(0, 1, 0)); 
+    cam.set(Point3(5, 5, 5), Point3(0, 0, 0), Vector3(0, 1, 0)); 
 }
 
 //<<<<<<<<<<<<<<<<<<<<<<<< myMouse >>>>>>>>>>>>>>>>>>>>>>
@@ -154,12 +149,16 @@ void myKeyboard(unsigned char key, int x, int y)
         cam.yaw(-1.0);
         break;
     case 'w':
-        teaX += 0.2;
-        teaZ += 0.4;
+        tea1X += 0.2;
+        tea1Z += 0.4;
+        tea2X += 0.2;
+        tea2Z += 0.4;
         break;
     case 'W':
-        teaX -= 0.2;
-        teaZ -= 0.4;
+        tea1X -= 0.2;
+        tea1Z -= 0.4;
+        tea2X -= 0.2;
+        tea2Z -= 0.4;
         break;
     case 'e':
         teaAngle += 10;
@@ -167,10 +166,19 @@ void myKeyboard(unsigned char key, int x, int y)
     case 'E':
         teaAngle += 10;
         break;
+    case 'a':
+        // animate
+        animate = !animate;
+        break;
     default:
         break;
     }
     glutPostRedisplay(); // draw it again
+}
+
+void drawLighting()
+{
+    glLightfv(GL_LIGHT0, GL_POSITION, position);
 }
 
 //<<<<<<<<<<<<<<<<<<<<<<< drawGrid  >>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -180,9 +188,16 @@ void drawGrid()
     {
         if (i % 10 == 0)
         {
-            // draw red and bold
             glLineWidth(3);
-            glColor3f(1.0f, 0.0f, 0.0f);
+            GLfloat ambient[]   = {0.3745f  ,0.01175f ,0.01175f , 1.0f};
+            GLfloat diffuse[]   = {0.61424f ,0.04136f ,0.04136f , 1.0f};
+            GLfloat specular[]  = {0.727811f,0.626959f,0.626959f, 1.0f};
+            GLfloat shininess   =  0.6f;
+
+            glMaterialfv(GL_FRONT, GL_AMBIENT  , ambient);
+            glMaterialfv(GL_FRONT, GL_DIFFUSE  , diffuse);
+            glMaterialfv(GL_FRONT, GL_SPECULAR , specular);
+            glMaterialf( GL_FRONT, GL_SHININESS, shininess * 128.0);
 
             //draw along the x axis
             glBegin(GL_LINES);
@@ -198,15 +213,23 @@ void drawGrid()
         } else
         {
             glLineWidth(1);
+            GLfloat ambient[]   = {0.1f     ,0.38725f,0.3745f  , 1.0f};
+            GLfloat diffuse[]   = {0.396f   ,0.74151f,0.69102f , 1.0f};
+            GLfloat specular[]  = {0.297254f,0.30829f,0.306678f, 1.0f};
+            GLfloat shininess   =  0.1f;
+
+            glMaterialfv(GL_FRONT, GL_AMBIENT  , ambient);
+            glMaterialfv(GL_FRONT, GL_DIFFUSE  , diffuse);
+            glMaterialfv(GL_FRONT, GL_SPECULAR , specular);
+            glMaterialf( GL_FRONT, GL_SHININESS, shininess * 128.0);
+
             //draw along the x axis
-            glColor3f(0.0f, 1.0f, 0.0f);
             glBegin(GL_LINES);
                 glVertex3f(i,0, gridDim);
                 glVertex3f(i,0, -gridDim);
             glEnd();
 
             //draw along the z axis
-            glColor3f(0.0f, 0.0f, 1.0f);
             glBegin(GL_LINES);
                 glVertex3f( gridDim,0,i);
                 glVertex3f( -gridDim,0,i);
@@ -216,28 +239,82 @@ void drawGrid()
     }
 }
 
-void drawTeapot()
+void drawTeapot1()
 {
-    glColor3f(0.8f, 0.8f, 1.0f);
+    GLfloat ambient[]   = {0.24725f ,0.1995f  ,0.0745f  , 1.0f};
+    GLfloat diffuse[]   = {0.75164f ,0.60648f ,0.22648f , 1.0f};
+    GLfloat specular[]  = {0.628281f,0.555802f,0.366065f, 1.0f};
+    GLfloat shininess   =  0.4f;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT  , ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE  , diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR , specular);
+    glMaterialf( GL_FRONT, GL_SHININESS, shininess * 128.0);
 
     glPushMatrix();
-    glTranslated( teaX, teaY, teaZ);
+    glTranslated( tea1X, tea1Y, tea1Z);
     glRotated(teaAngle, 0, 1, 0);
     glutSolidTeapot(1.0); // draw the teapot
     glPopMatrix();
 }
 
+void drawTeapot2()
+{
+    GLfloat ambient[]   = {0.19225f ,0.19225f ,0.19225f , 1.0f};
+    GLfloat diffuse[]   = {0.50754f ,0.50754f ,0.50754f , 1.0f};
+    GLfloat specular[]  = {0.508273f,0.508273f,0.508273f, 1.0f};
+    GLfloat shininess   =  0.4f;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT  , ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE  , diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR , specular);
+    glMaterialf( GL_FRONT, GL_SHININESS, shininess * 128.0);
+
+    glPushMatrix();
+    glTranslated( tea2X, tea2Y, tea2Z);
+    glRotated(teaAngle, 0, 1, 0);
+    glutSolidTeapot(1.0); // draw the teapot
+    glPopMatrix();
+}
 
 //<<<<<<<<<<<<<<<<<<<<<<< myDisplay >>>>>>>>>>>>>>>>>>>>>>>>>>
 void myDisplay(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+    drawLighting();
+    glEnable(GL_LIGHT0);
+    drawTeapot1();
+    drawTeapot2();
+    glDisable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
     drawGrid();
-    drawTeapot();
+    glDisable(GL_LIGHT1);
 
     glutSwapBuffers();
-} 
+}
+
+void myIdle()
+{
+    mySleep(100);
+
+    if (animate)
+    {
+        cnt += 1;
+        if (cnt > intervals)
+        {
+            cnt = 0;
+        }
+        t = (cnt*1.0)/intervals;
+        position[0] = 4*cos(t*2*PI);
+        position[1] = 2+ 4*cos(t*2*PI);
+        position[2] = 4*sin(t*2*PI);
+    }
+
+    glutPostRedisplay();
+}
+
 //<<<<<<<<<<<<<<<<<<<<<< main >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int main(int argc, char **argv)
 {
@@ -250,6 +327,7 @@ int main(int argc, char **argv)
     // register callback functions
     glutMouseFunc(myMouse);
     glutMotionFunc(myMotion);
+    glutIdleFunc(myIdle);
     glutKeyboardFunc(myKeyboard);
     glutSpecialFunc(mySpecialKeyboard);	
     glutDisplayFunc(myDisplay);
@@ -259,4 +337,14 @@ int main(int argc, char **argv)
     glutMainLoop();
 
     return( 0 );
+}
+
+void mySleep(int sleepMs)
+{
+#ifdef __linux__
+    usleep(sleepMs * 1000);   // usleep takes sleep time in us (1 millionth of a second)
+#endif
+#if defined(_WIN32) || defined(_WIN64)
+    Sleep(sleepMs);
+#endif
 }

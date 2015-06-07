@@ -1,0 +1,49 @@
+# CS550 Foundations of Computer Graphics
+## Homework 3
+### Loran Briggs
+
+
+These program have been created, compiled and tested on a **Ubuntu 14.10** computer
+using the **g++ compiler** AND **Microsoft Visual Studio 10** on **Windows 7**.
+
+Header guards are included to use the appropriate header files for either
+Windows or Linux as you will see at the top of the
+header files. If for some reason the header guard does not work for
+your machine you can refer to the following website for the appropriate
+naming convention for your OS.
+
+http://sourceforge.net/p/predef/wiki/OperatingSystems/
+
+If all else fails you can also comment out the sections labeled `linux headers`
+in the two files mentioned above.
+
+If you are compiling with g++ the following command will work:
+
+    g++ *.cpp -o robotgame -lGL -lGLU -lglut
+
+and to execute:
+
+    ./robotgame
+
+If you are using Visual Studio, copy the files into an empty project and
+build and run using the gui menu options.
+
+## How To Play
+The object of the game is to move the two silver objects to the silver table and
+to move the two gold objects to the gold table. Once both objects are on their
+appropriate table, the table will flash red to indicate a winning state, do that
+for both tables and you are a mighty claw master!
+
+Meanwhile, there are two *baddies*
+out to get you. Baddies of course are no match for your claw, to defend yourself
+you must attack the baddies with your claw. If you miss the baddies with your claw
+and the baddy gets you, you will take damage. Ten damage, and you're dead. Luckly,
+you are much stronger than the baddies, the mighty claw only has to hit a baddy
+twice to be rid of it forever.
+
+### Controls
+To navigate your robot around the room use the `WASD` keys for forward, left, backward,
+and right movement. To rotate the robot arm use the `left` and `right` arrow keys. To raise
+and lower the claw use the `up` and `down` arrow keys. Lastly, to close the claw use the
+`spacebar`. To restart at any time press the `esc` key.
+
